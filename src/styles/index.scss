@@ -1,0 +1,294 @@
+// For reasons I can't fathom, the CSS variables must be assigned in both
+// Places to work correctly.
+html,
+body,
+*:is(html:is(*), body:is(*)) {
+  display: block !important;
+}
+
+html,
+body,
+html:root {
+  --electron-padding-top: 1.5rem;
+  --atlas-purple-dark: rgb(33, 33, 52);
+  --atlas-purple-light: rgb(123, 121, 255);
+
+  // Apple
+  --apple-red: rgb(255, 59, 48);
+  --apple-red-dark: rgb(255, 69, 58);
+  --apple-orange: rgb(255, 149, 0);
+  --apple-orange-dark: rgb(255, 159, 10);
+  --apple-yellow: rgb(255, 204, 0);
+  --apple-yellow-dark: rgb(255, 214, 10);
+  --apple-green: rgb(52, 199, 89);
+  --apple-green-dark: rgb(86, 227, 110);
+  --apple-teal-blue: rgb(90, 200, 250);
+  --apple-teal-blue-dark: rgb(100, 210, 260);
+}
+
+html {
+  --electron-padding-top: 1.5rem;
+  --atlas-purple-dark: rgb(33, 33, 52);
+  --atlas-purple-light: rgb(123, 121, 255);
+
+  // Apple
+  --apple-red: rgb(255, 59, 48);
+  --apple-red-dark: rgb(255, 69, 58);
+  --apple-orange: rgb(255, 149, 0);
+  --apple-orange-dark: rgb(255, 159, 10);
+  --apple-yellow: rgb(255, 204, 0);
+  --apple-yellow-dark: rgb(255, 214, 10);
+  --apple-green: rgb(52, 199, 89);
+  --apple-green-dark: rgb(86, 227, 110);
+  --apple-teal-blue: rgb(90, 200, 250);
+  --apple-teal-blue-dark: rgb(100, 210, 260);
+
+  height: 100%;
+
+  // Atlas-specific overrides
+  .left-menu {
+    padding-top: var(--electron-padding-top) !important;
+  }
+
+  // Selects the main container and applies the padding-top
+  div:has(> [data-component="navbar"]) > div:not(:has(> p[role="log"])) {
+    padding-top: var(--electron-padding-top) !important;
+  }
+
+  // Atlas-Electron style sheets
+  #electron-menu {
+    background-color: var(--atlas-purple-dark);
+    -webkit-app-region: drag;
+    position: fixed;
+    height: 1.5rem;
+    width: 100dvw;
+    z-index: 999;
+    left: 0;
+    top: 0;
+
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+
+    // padding: 0rem 0.75rem;
+    padding: 0rem 1rem;
+    > #windows-controls {
+      -webkit-app-region: no-drag;
+    }
+  }
+}
+
+#windows-controls {
+  order: -1; // Move to the left
+}
+#windows-controls-buttons {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+
+  &:hover {
+    .windows-controls-button svg {
+      opacity: 1;
+    }
+  }
+}
+
+.windows-controls-button {
+  &#minimize-button {
+    --wcb-color-hover: var(--apple-yellow-dark);
+    --wcb-color: var(--apple-yellow);
+  }
+  &#maximize-button {
+    --wcb-color-hover: var(--apple-green-dark);
+    --wcb-color: var(--apple-green);
+  }
+  &#close-button {
+    --wcb-color-hover: var(--apple-red-dark);
+    --wcb-color: var(--apple-red);
+  }
+
+  background-color: var(--wcb-color, white);
+  &:hover {
+    background-color: var(--wcb-color-hover, white);
+  }
+
+  border: 0.5px solid rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+  height: 0.75rem;
+  width: 0.75rem;
+
+  justify-content: center;
+  align-items: center;
+  display: flex;
+
+  svg {
+    transition: opacity 80ms ease-in-out;
+    height: 1rem;
+    width: 1rem;
+    opacity: 0;
+  }
+}
+
+svg.rotate45 {
+  transform: rotate(45deg);
+}
+
+// Navbar buttons states
+body {
+  &[focused="false"] {
+    .windows-controls-button {
+      background-color: #4a4a6a !important;
+    }
+  }
+
+  &:not([maximized]) {
+    #maximize-button {
+      svg {
+        &.expand {
+          display: block;
+        }
+        &.compress {
+          display: none;
+        }
+      }
+    }
+  }
+
+  &[maximized="true"] {
+    #maximize-button {
+      svg {
+        &.expand {
+          display: none;
+        }
+        &.compress {
+          display: block;
+        }
+      }
+    }
+  }
+  &[maximized="false"] {
+    #maximize-button {
+      svg {
+        &.expand {
+          display: block;
+        }
+        &.compress {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+// Utility classes
+.no-highlight {
+  user-select: none;
+
+  &highlight::selection {
+    background-color: transparent;
+  }
+}
+
+.monospace-font {
+  font-family: "Fira Code", monospace;
+}
+
+// Atlas Menu Attribution
+#atlas-menu-attribution {
+  margin-left: auto;
+  text-align: right;
+
+  color: rgb(255, 255, 255);
+  letter-spacing: 1.6px;
+  font-weight: 1000;
+  font-size: 12px;
+  cursor: default;
+
+  span#atlas-menu-version {
+    color: rgb(165, 165, 186);
+    letter-spacing: -2px;
+    margin-right: 4px;
+    font-weight: 100;
+    font-size: 12px;
+    span.first-letter {
+      margin-right: 4px;
+    }
+  }
+}
+
+// Scrollbars
+
+/* Windows */
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  *::-webkit-scrollbar {
+    width: 10px;
+    background-color: #f5f5f5;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 5px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background-color: #f5f5f5;
+    border-radius: 5px;
+  }
+
+  *::-webkit-scrollbar-button {
+    background-color: #f5f5f5;
+    border-radius: 5px;
+  }
+}
+
+/* macOS */
+@media not all and (min-resolution: 0.001dpcm) {
+  *::-webkit-scrollbar {
+    width: 10px;
+    background-color: #f5f5f5;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 5px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background-color: #f5f5f5;
+    border-radius: 5px;
+  }
+
+  *::-webkit-scrollbar-button {
+    background-color: #f5f5f5;
+    border-radius: 5px;
+  }
+}
+
+html {
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+    background-color: #f5f5f5;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: #d3ced4;
+    border-radius: 5px;
+    &::hover {
+      background-color: #bab3bb;
+    }
+  }
+
+  *::-webkit-scrollbar-track {
+    background-color: #f5f5f5;
+    border-radius: 5px;
+  }
+
+  *::-webkit-scrollbar-button {
+    background-color: #f5f5f5;
+    display: none !important;
+    border-radius: 5px;
+  }
+}
